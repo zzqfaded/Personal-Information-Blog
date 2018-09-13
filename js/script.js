@@ -1,3 +1,4 @@
+// import ajax from './ajax';
 $(function() {
 
   $('#slider').slider();

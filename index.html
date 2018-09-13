@@ -3,13 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <title>Demo</title>
-
+  <script type="text/javascript" src="./js/vue.js"></script>
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/index.css">
+  <script type="text/javascript">
+    window.onload = function(){
+      new Vue({
+        el:'body',
+        data:{
+          msg:'hello Vue'
+        }
+      });
+    };
+  </script>
 </head>
 <body>
-
-  <header class="header">
+  <header class="header" id="header">
     <div class="header-inner body-width">
       <a href="#" class="logo"></a>
       <div class="category">
@@ -56,7 +65,7 @@
     <div class="header-shadow"></div>
   </header>
 
-  <div class="main">
+  <div class="main" id="box">
     <div class="main-inner body-width">
       <div class="banner clearfix">
         <div class="slider" id="slider">
@@ -655,9 +664,34 @@
     </div>
   </footer>
 
-
   <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
   <script src="js/script.js"></script>
+  <script src="js/ajax.js"></script>
 
+  <script type="text/javascript">
+    const items = new Set([1, 2, 3, 4, 5, 5, 5, 5]);
+    console.log(items.size);
+    // $(document).ready(function(){
+    //   $.ajax({
+    //     type:'post',
+    //     url:'https://www.dian68.net/app/renren.php?do=Index&sign=everyone_app_laike',
+    //     header:{
+    //       'Content-type' : 'application/x-www-form-urlencoded'
+    //     },
+    //     data:{
+    //       openid:'oQWwf5cf74XumgGmE0H7ptoXcqUU',
+    //       sign:'everyone_app_laike',
+    //       siteid:'20881809088687042877',
+    //       appid:'wxd800ea0ed7a4cda5',
+    //     },
+    //     success:function(_data){
+    //       console.log(_data);
+    //     },
+    //     complate:function(result){
+    //       console.log(result)
+    //     }
+    //   })
+    // });
+  </script>
 </body>
 </html>
