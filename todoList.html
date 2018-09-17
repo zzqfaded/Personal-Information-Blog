@@ -4,53 +4,85 @@
 	<meta charset="UTF-8">
 	<title></title>
 	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   	<script type="text/javascript" src="./js/jquery.min.js"></script>
+  	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="./js/vue.js"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			new Vue({
+				el:"#todo",
+				data:{
+					myData:[
+					{name:"香颐仙女",age:18},
+					{name:"张子强",age:18},
+					],
+					username:"",
+					age:"",
+					nowIndex:""
+				},
+				methods:{
+					addData:function(){
+						this.myData.push({
+							name: this.username,
+							age : this.age
+						})
+						this.username = "";
+						this.age = "";
+					},
+					delData:function(index){
+						// console.log(index);
+						if(index != -2){
+							this.myData.splice(index,1);
+						}else{
+							this.myData = [];
+						}
+
+					}
+				}
+			})
+		}
+	</script>
 </head>
 <body>
-	<div class="container">
+	<div class="container" id="todo">
 		<form role="form">
 			<div class="form-group">
 				<label for="username">用户名:</label>
-				<input type="text" name="username" class="form-control" placeholder="请输入用户名">
+				<input type="text" name="username" class="form-control" placeholder="请输入用户名" v-model="username">
 			</div>
 			<div class="form-group">
 				<label for="age">年龄：</label>
-				<input type="text" id="age" name="age" class="form-control" placeholder="请输入年龄">
+				<input type="text" id="age" name="age" class="form-control" placeholder="请输入年龄" v-model="age">
 			</div>
 			<div class="form-group">
-				<input type="button" value="添加" name="" class="btn btn-primary">
-				<input type="button" value="重置" name="" class="btn btn-danger">
+				<input v-on:click="addData()" type="button" value="添加" name="" class="btn btn-primary">
+				<input type="reset" value="重置" name="" class="btn btn-danger">
 			</div>
 		</form>
 		<hr>
 		<table class="table table-hover table-bordered">
-			<caption class="h2 text-info"></caption>
+			<caption class="h2 text-info text-center">
+				数据表
+			</caption>
 			<tr class="text-danger">
 				<th class="text-center">序号</th>
 				<th class="text-center">名字</th>
 				<th class="text-center">年龄</th>
 				<th class="text-center">操作</th>
 			</tr>
-			<tr>
-				<td>1</td>
-				<td>张三</td>
-				<td>16</td>
-				<td><button class="btn btn-sm btn-danger">删除</button></td>
+			<tr v-for="(toDoVal,index) in myData" class="text-center">
+				<td>{{index+1}}</td>
+				<td>{{toDoVal.name}}</td>
+				<td>{{toDoVal.age}}</td>
+				<td><button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#layer" v-on:click="nowIndex = index">删除</button></td>
 			</tr>
-			<tr>
-				<td>2</td>
-				<td>李四</td>
-				<td>18</td>
-				<td><button class="btn btn-sm btn-danger">删除</button></td>
-			</tr>
-			<tr>
+			<tr v-if="myData.length != 0">
 				<td colspan="4" class="text-right">
-					<button class="btn btn-danger btn-sm">删除全部</button>		
+					<!-- <button class="btn btn-primary btn-sm">添加</button>	 -->
+					<button class="btn btn-danger btn-sm" v-on:click="nowIndex = -2" data-toggle="modal" data-target="#layer">删除全部</button>		
 				</td>
 			</tr>
-			<tr>
+			<tr v-if="myData.length == 0">
 				<td colspan="4" class="text-center text-muted">
 					<p>暂无数据......</p>
 				</td>
@@ -58,8 +90,21 @@
 		</table>
 
 		<!-- 模态框 -->
-		<div role="dialog" class="modal">
-			
+		<div role="dialog" class="modal fade bs-example-modal-sm" id="layer">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" data-dismiss="modal" type="button">
+							<span>&times;</span>
+						</button>
+						<h3 class="modal-title">确认删除吗？</h3>
+					</div>
+					<div class="modal-body text-right">
+						<button class="btn btn-primary btn-sm" data-dismiss="modal">取消</button>
+						<button class="btn btn-danger btn-sm" data-dismiss="modal" v-on:click="delData(nowIndex)">确定</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>

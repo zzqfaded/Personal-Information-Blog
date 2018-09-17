@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<script type="text/javascript" src="./js/vue.js"></script>
+	<!-- <script type="text/javascript" src="./js/vue-resource.js"></script> -->
+	<script src="https://cdn.bootcss.com/vue-resource/1.5.1/vue-resource.min.js"></script>
+	<style type="text/css">
+		.bg{
+			background: grey;
+		}
+	</style>
+	<script type="text/javascript">
+		window.onload = function(){
+			new Vue({
+				el:"#app",
+				data:{
+					welcome:"",
+					getData:[],
+					t1:"",
+					nowIndex:-1
+				},
+				methods:{
+					//post请求  需要设置emulateJSON:true 和header
+					get:function(){
+						this.$http.get('./public/post.php',{
+						}).then(function(res){
+							console.log(res.data)
+							// if(res.status === 200){
+							// 	this.welcome = res.data;
+							// 	document.body.append(res.data);
+							// }
+						},function(res){
+							console.log(res);
+						});
+					},
+					ajax:function(){
+						this.$http.jsonp("https://www.baidu.com/s",{
+							wd:this.t1
+						}).then(function(res){
+							this.getData = res.data.books
+						},function(res){
+
+						});
+					},
+					changeDown:function(){
+						this.nowIndex++;
+						if(this.nowIndex == this.getData.length) this.nowIndex=-1;
+						this.t1 = this.getData[this.nowIndex];
+					},
+					changeUp:function(){
+						this.nowIndex--;
+						if(this.nowIndex == -2)this.nowIndex = this.getData.length-1;
+						this.t1 = this.getData[this.nowIndex];
+					}
+				}
+			});
+		};
+	</script>
+</head>
+<body>
+	<!-- <div id="app">
+		<input type="button" value="按钮" name="" @click="get()">
+		<input type="text" v-model="welcome" name="" >
+	</div> -->
+
+
+	<div id="app">
+		<input type="text" name="" v-model="t1" @keyup="ajax()" @keydown.up.prevent="changeUp()" @keydown.down="changeDown()">
+		<ul>
+			<li v-for="(val,index) in getData" :class="{bg : index == nowIndex}">
+				{{val.title}}
+			</li>
+		</ul>
+		<p v-show="getData.length == 0">暂无数据...</p>
+	</div>
+</body>
+</html>

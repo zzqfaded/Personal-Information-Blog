@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<script type="text/javascript" src="./js/vue.js"></script>
+	<script type="text/javascript" src="./js/vue-resource.js"></script>
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			var vm = new Vue({
+				el:"#app",
+				data:{
+					visible:false,
+					msg:'welcome',
+					s:'<h1>msg</h1>',
+					a:1
+				},
+				beforeCreate:function(){
+					alert("new vue实例已经创建");
+					
+				},
+				created:function(){
+					alert("new vue实例已经创建,编译开始之前");
+				},
+				computed:{
+					/*b:function(){
+						return this.a;
+					}*/
+					b:{
+						get:function(){
+							return this.a+1;
+						},
+						set:function(val){
+							this.a = val;
+						}
+					}
+				},
+				methods:{
+
+				}
+			})
+			document.onclick=function(){
+				// console.log(vm.$log()); 报错  is not a function
+				// console.log(vm.$el);
+				vm.$el.style.background = 'red';
+				// console.log(vm.$data);
+				vm.b = 100;
+			}
+
+			//vm.$mount("#app");		手动挂载
+			//var vm = new Vue({data:{a:1}}).$mount("#app");
+		}
+	</script>
+</head>
+<body>
+	<!-- 生命周期
+	钩子函数：
+	beforeCreate ： 实例创建之前调用
+	created : 实例创建成功，此时data数据已经显示出来
+	beforeMount : 数据中的data在view中先占一个位置
+	mounted ： 模板中的data已经渲染完成
+	beforeUpdate ： 当data数据发生变化时调用，发生在虚拟dom重新渲染和打补丁之前
+	updated : data数据更改导致的虚拟dom重新渲染和打补丁
+	beforeDestroy ： 在vue实例销毁之前调用，此时实例仍然可以用
+	destroyed ： 在vue实例销毁之后调用，vue实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁
+-->
+
+	<!-- v-cloak   防止网络请求缓慢   用户可以看到{{}}  在渲染数据处使用  style中定义  [v-cloak]{display:none;} -->
+	<!-- 防止添加值时数据相同的报错  track-by='索引' track-by='index/uid'  提高循环性能-->
+	<!-- v-text  绑定文本数据   防止闪烁  <span v-text="msg"></span> -->
+	<!-- v-html 绑定含html标签的数据  防止闪烁 <span v-html="msg"></span-->
+	<!-- 计算属性   computed -->
+	<!-- 访问实例的自定义属性  vm.$options.obj -->
+	<!-- 销毁对象  vm.$destroy -->
+
+	<div id="app">
+		{{msg}}
+		<span v-text="msg"></span>
+		<span v-html="s"></span>
+
+
+		<p>a=>{{a}}</p>
+		<p>b=>{{b}}</p>
+
+		<el-button @click="visible = true">Button</el-button>
+	    <el-dialog :visible.sync="visible" title="Hello world">
+	      <p>Try Element</p>
+	    </el-dialog>
+	</div>
+</body>
+</html>

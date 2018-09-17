@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+		.red{
+			color:red;
+		}
+	</style>
+	<script type="text/javascript" src="./js/vue.js"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			new Vue({
+				el:"#handel",
+				data:{
+					url:"https://www.baidu.com/img/bd_logo1.png?where=super",
+					altVal:"这是百度的图片",
+					redBol:true,
+					aType:null
+				},
+				methods:{
+					show:function(ev){
+						// alert(ev.clientX);
+						// 原生js  阻止事件冒泡  cancelBubble
+						// ev.cancelBubble = true;
+						
+						//阻止浏览器默认行为  例如右键查看源代码
+						// ev.preventDefault();
+						
+					},
+					enter:function(){
+						// alert(event.keyCode);
+						//keyCode   拿到键盘事件对象的ascoll值
+						
+						if(event.keyCode == 13){
+							alert("回车键");
+						}
+					},
+				}
+			})
+		}
+	</script>
+</head>
+<body>
+	<div id="handel">
+		<!--$event   事件对象-->
+		<!-- click.stop  阻止事件冒泡 -->
+		
+		<!-- contextmenu 鼠标右键事件 -->
+		<!--  contextmenu.prevent 阻止默认行为-->
+		<input type="button" value="按钮" v-on:contextmenu.prevent="show()" name="">
+		<!-- keydown  keyup  键盘事件 -->
+		<!-- vue键盘事件属性  .13  .enter  回车键  .up  .dowm  .left  .right  .delete -->
+		<input type="text" @keydown.enter="enter()" name="">
+		<!-- vue  属性用bind -->
+		<!-- v-bind的简写   :   -->
+		<!-- class   -> v-bind:class="red:redBol" -->
+		<img v-bind:src="url" v-bind:alt="altVal">
+		<p v-bind:class="{red:redBol}">我是文字</p>
+
+
+		<!-- {{*msg}}  数据只更新一次 {{{msg}}}  数据绑定并且可以进行html转义-->
+
+		<!-- 过滤器  {{msg | filterA | filterB}} -->
+		<!-- currency  金钱的标识  用法->  {{12 | currency '￥'}} 可接受传参 -->
+	</div>
+</body>
+</html>
