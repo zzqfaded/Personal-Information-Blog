@@ -13,9 +13,9 @@
   		text-decoration: none;
   	}
   	.app{
-  		height: 100vh;
+  		min-height: 100vh;
   	}
-  	.el-container{
+  	.container,.container-body{
   		height: 100%;
   	}
   	.el-dropdown-link{
@@ -64,17 +64,148 @@
 	  	height: 100%;
 	    border-radius: 4px;
   	}
-  	.menuBox{
+  	/*动态框*/
+  	.main-box{
+  		min-height:400px;
+  		width: 1226px;
+  		margin: 0 auto;
+  		/*background:grey;*/
+  		display: flex;
+  		flex-direction: row;
+  		justify-content: space-between;
+  	}
+  	.main-box .main-content{
+  		min-height: 200px;
+  		width: 65%;
+  		/*background: gold;*/
+  		display: flex;
+  		flex-direction: column;
+  	}
+  	
+  	/*动态内容*/
+  	.main-box .main-content .content-dynamic{
+  		min-height: 170px;
+  		width: 100%;
+  		display: flex;
+  		flex-direction: column;
+  		/*margin-bottom: 20px;*/
+  	}
+  	/*动态内容头*/
+  	.content-dynamic .dynamic-header{
+  		display: flex;
+  		flex-direction: row;
+  		align-items: center;
+  		height: 50px;
+  		width: 100%;
+  	}
+  	.content-dynamic .dynamic-header img{
+  		width: 40px;
+  		height: 40px;
+  		border-radius: 40px;
+  	}
+  	.content-dynamic .dynamic-header img::after{
+  		border:none;
+  	}
+  	.content-dynamic .dynamic-header .author{
+  		font-size: 16px;
+  		height: 40px;
+  		line-height: 40px;
+  		color: #555;
+  		font-weight: 600;
+  		padding-left: 15px;
+  	}
+  	/*动态内容身体*/
+  	.content-dynamic .dynamic-body{
+  		display: flex;
+  		flex-direction: column;
+  		min-height:100px;
+  		width: 100%;
+  	}
+  	.dynamic-body .dynamic-content-title{
+  		font-size: 16px;
+  		color: black;
+  		height: 30px;
+  		line-height: 30px;
+  	}
+  	.dynamic-body .dynamic-content{
+  		font-size: 14px;
+  		color: #ccc;
+  		min-height: 30px;
+  		line-height: 30px;
+  	}
+  	/*动态内容脚*/
+  	.dynamic-footer{
+  		width: 100%;
+  		height: 20px;
+  		display: flex;
+  		flex-direction: row;
+  		justify-content: space-between;
+  	}
+  	.dynamic-footer .footer-left,.dynamic-footer .footer-right div{
+  		height: 20px;
+  		line-height: 20px;
+  		font-size: 12px;
+  		color:#ccc;
+  	}
+  	.dynamic-footer .dynamic-date{
+
+  	}
+
+  	.dynamic-footer .footer-right{
+  		display: flex;
+  		flex-direction: row;
+  	}
+  	.dynamic-footer .footer-right .dynamic-read-num{
+
+  	}
+  	.dynamic-footer .footer-right .dynamic-vote{
+  		padding-left: 10px;
+  	}
+
+
+  	/*登陆者信息区域*/
+  	.main-box .main-message{
+  		margin-left:5%; 
+  		width: 30%;
+  		height: 280px;
+  		display: flex;
+  		flex-direction: column;
+  		position: relative;
+  		box-shadow: 2px 4px 5px 2px rgba(30,30,30,.2);
+  	}
+  	.main-box .main-message .message-bg{
+  		width: 100%;
+  		height: 120px;
+  	}
+  	.main-box .main-message .message-bg img{
+  		width: 100%;
   		height: 100%;
   	}
-  	.el-menu{
+  	.main-box .main-message .message-content{
+  		width: 100%;
+  		height: 160px;
+  		background: #f5f5f5;
+  	}
+  	.main-box .main-message .message-avatar{
+  		position: absolute;
+  		top:50%;
+  		left: 50%;
+  		margin-left: -40px;
+  		margin-top:-60px;
+  		width: 80px;
+  		height: 80px;
+  		border-radius:40px; 
+  	}
+  	.main-box .main-message .message-avatar img{
   		height: 100%;
+  		width: 100%;
+  		border-radius:50%; 
   	}
   </style>
 </head>
 <body>
   <div id="app" class="app">
-  	<el-container>
+  	<el-container class="container">
 	  <el-header>
 	  	<el-row :gutter="20">
 	  	  <el-col :span="6" class="h-logo"><p>信息</p></el-col>
@@ -96,58 +227,89 @@
 		  </el-col>
 		</el-row>
 	  </el-header>
-	  <el-container>
-	    <el-aside width="235px">
-	    	<div class="menuBox">
-	    		<el-menu menu-trigger="click" default-active="1" class="el-menu-vertical-demo">
-		    		<el-menu-item index="1">
-		    			<i class="el-icon-info"></i>
-		    			<span slot="title">个人信息</span>
-		    		</el-menu-item>
-					<el-menu-item index="2">
-		    			<i class="el-icon-document"></i>
-		    			<span slot="title">评论留言</span>
-		    		</el-menu-item>
-					<el-menu-item index="3">
-		    			<i class="el-icon-printer"></i>
-		    			<span slot="title">展示区域</span>
-		    		</el-menu-item>
-		    		<el-submenu index="4">
-		    			<template slot="title">
-		    				<i class="el-icon-tickets"></i>
-		    				<span>javascript</span>
-		    			</template>
-		    			<el-menu-item-group>
-		    				<template slot="title">分组一</template>
-		    				<el-menu-item index="1-1">ECMAScript6</el-menu-item>
-		    				<el-menu-item index="1-2">JQuery</el-menu-item>
-		    			</el-menu-item-group>
-		    			<el-menu-item-group title="分组二">
-		    				<el-menu-item index="1-3">VueJS</el-menu-item>
-		    			</el-menu-item-group>
-		    			<el-submenu index="1-4">
-		    				<template slot="title">版本控制</template>
-		    				<el-menu-item index="1-4-1">Git</el-menu-item>
-		    			</el-submenu>
-		    		</el-submenu>
-	    		</el-menu>
-	    	</div>
-	    </el-aside>
-	    <el-container>
+	  <el-container class="container-body">
 	      <el-main>
-	      	<!-- <el-button @click="visible = true">Button</el-button>
-		    <el-dialog :visible.sync="visible" title="Hello world">
-		      <p>Try Element</p>
-		    </el-dialog> -->
+	    	<div class="main-box">
+	    		<div class="main-content">
+	    			<div class="content-title-area">
+	    				<template>
+	    					<el-tabs type="border-card" v-model="activeVal">
+	    						<el-tab-pane label="热门动态" name="1">
+	    							<div class="content-dynamic">
+	    								<div class="dynamic-header">
+	    									<img src="/images/timg.jpg">
+	    									<div class="author">方舟：进化</div>
+	    								</div>
+	    								<div class="dynamic-body">
+	    									<div class="dynamic-content-title">
+	    										维护公告
+	    									</div>
+	    									<div class="dynamic-content">
+	    										客户端打开没反应 之前还好好的  现在打开客户端都是空白！求解！
+	    										亲爱的冒险者：为了给您提 供更好的游戏体验，全区将于8月24日上午09点进行一次为期约1个小时,进不去游戏。玩不了。修复都不行！
+	    									</div>
+	    								</div>
+	    								<div class="dynamic-footer">
+	    									<div class="footer-left dynamic-date">08-23&nbsp;12.30</div>
+	    									<div class="footer-right">
+	    										<div class="dynamic-read-num">
+	    											<i class="el-icon-view"></i>1591
+	    										</div>
+	    										<div class="dynamic-vote">
+	    											<i class="el-icon-star-off"></i>36
+	    										</div>
+	    									</div>
+	    								</div>
+	    							</div>
 
-		    <el-row :gutter="20">
-		    	<el-col :span="14" :offset="3">
-		    		<p>123</p>
-		    	</el-col>
-		    </el-row>
+	    							<div class="content-dynamic">
+	    								<div class="dynamic-header">
+	    									<img src="/images/timg.jpg">
+	    									<div class="author">方舟：进化</div>
+	    								</div>
+	    								<div class="dynamic-body">
+	    									<div class="dynamic-content-title">
+	    										维护公告
+	    									</div>
+	    									<div class="dynamic-content">
+	    										客户端打开没反应 之前还好好的  现在打开客户端都是空白！求解！
+	    										亲爱的冒险者：为了给您提 供更好的游戏体验，全区将于8月24日上午09点进行一次为期约1个小时,进不去游戏。玩不了。修复都不行！
+	    									</div>
+	    								</div>
+	    								<div class="dynamic-footer">
+	    									<div class="footer-left dynamic-date">08-23&nbsp;12.30</div>
+	    									<div class="footer-right">
+	    										<div class="dynamic-read-num">
+	    											<i class="el-icon-view"></i>1591
+	    										</div>
+	    										<div class="dynamic-vote">
+	    											<i class="el-icon-star-off"></i>36
+	    										</div>
+	    									</div>
+	    								</div>
+	    							</div>
+	    						</el-tab-pane>
+	    						<!-- <el-tab-pane label="圈子" name="2">圈子</el-tab-pane>
+	    						<el-tab-pane label="个人动态" name="3">个人动态</el-tab-pane>
+	    						<el-tab-pane label="个人信息" name="4">个人信息</el-tab-pane> -->
+	    					</el-tabs>
+	    				</template>
+	    			</div>
+	    		</div>
+	    		<div class="main-message">
+	    			<div class="message-bg">
+	    				<img src="/images/cont/slider_img5.jpg">
+	    			</div>
+	    			<div class="message-content">
+	    				
+	    			</div>
+	    			<div class="message-avatar">
+	    				<img src="/images/timg.jpg">
+	    			</div>
+	    		</div>
+	    	</div>
 		  </el-main>
 	      <el-footer><span class="el-icon-info">个人信息</span></el-footer>
-	    </el-container>
 	  </el-container>
 	</el-container>
   </div>
@@ -159,10 +321,11 @@
   <script>
     new Vue({
       el: '#app',
-      data: function() {
-        return { 
-        	visible: false 
-        }
+      data:{
+      	activeVal:'1',
+      },
+      methods:{
+
       }
     })
   </script>

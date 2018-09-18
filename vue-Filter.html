@@ -7,9 +7,13 @@
 	<script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
 	<script type="text/javascript">
 		window.onload = function(){
+			Vue.filter('date',function(){
+				
+			})
 			new Vue({
 				el:"#vue-app",
 				data:{
+					//时间戳  Date.now()
 					timeT:Date.now(),
 					filterData:["饼干","糖果","果冻","牛奶","坚果"]
 				},

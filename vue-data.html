@@ -22,6 +22,7 @@
 					nowIndex:-1
 				},
 				methods:{
+
 					//post请求  需要设置emulateJSON:true 和header
 					get:function(){
 						this.$http.get('./public/post.php',{
@@ -53,7 +54,15 @@
 						this.nowIndex--;
 						if(this.nowIndex == -2)this.nowIndex = this.getData.length-1;
 						this.t1 = this.getData[this.nowIndex];
+					},
+					selectFrom:function(lower, upper) {
+					       var sum = upper - lower + 1; 	//总数-第一个数+1
+					       console.log(Math.floor(Math.random() * sum + lower));                                          
+					       return Math.floor(Math.random() * sum + lower);
 					}
+				},
+				computed:{
+					
 				}
 			});
 		};
@@ -67,6 +76,7 @@
 
 
 	<div id="app">
+		<button @click="selectFrom(10,20)">随机数</button>
 		<input type="text" name="" v-model="t1" @keyup="ajax()" @keydown.up.prevent="changeUp()" @keydown.down="changeDown()">
 		<ul>
 			<li v-for="(val,index) in getData" :class="{bg : index == nowIndex}">

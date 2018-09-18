@@ -4,20 +4,67 @@
 	<meta charset="utf-8">
 	<title></title>
 	<style type="text/css">
+		body{
+			overflow: hidden;
+		}
 		.red{
 			color:red;
+		}
+		.dragBox{
+			width: 100px;
+			height: 100px;
+			background: red;
+			position: absolute;
+			right: 0;
+			top: 0;
 		}
 	</style>
 	<script type="text/javascript" src="./js/vue.js"></script>
 	<script type="text/javascript">
 		window.onload = function(){
-			new Vue({
+			// document.body.onselectstart = document.body.ondrag = function(){
+			// 　　　　return false;
+			// }
+			Vue.directive('drag',{
+				//初始化
+				bind:function(el,binding){
+					el.style.background = binding.value;
+					//阻止鼠标移动时  会选中文字或者图片
+					el.onselectstart = el.ondrag = function(){
+							return false;
+					}
+					//移动的距离 = 移动后的位置 - 初始的位置
+					el.onmousedown = function(ev){
+						var disX = ev.clientX - el.offsetLeft;
+						var disY = ev.clientY - el.offsetTop;
+						document.onmousemove = function(ev){
+							var l = ev.clientX - disX;
+							var t = ev.clientY - disY;
+							el.style.left = l + 'px';
+							el.style.top = t + 'px';
+						};
+						document.onmouseup = function(){
+							document.onmousemove = null;
+							document.onmouseup = null;
+						}
+					}
+				}
+			});
+			var vm = new Vue({
 				el:"#handel",
 				data:{
+					a:'blue',
 					url:"https://www.baidu.com/img/bd_logo1.png?where=super",
 					altVal:"这是百度的图片",
 					redBol:true,
-					aType:null
+					aType:null,
+					childrens: {
+		                name: '小强',
+		                age: 20,
+		                sex: '男'
+		            },
+		            tdArray:["1","2"],
+		            lastName:"张三"
 				},
 				methods:{
 					show:function(ev){
@@ -37,8 +84,26 @@
 							alert("回车键");
 						}
 					},
-				}
-			})
+				},
+				watch:{
+		            childrens:{
+		                handler:function(val,oldval){
+		                    console.log(val.name)
+		                },
+		                deep:true//对象内部的属性监听，也叫深度监听
+		            },
+		            'childrens.name':function(val,oldval){
+		                // console.log(val+"aaa");
+		            },//键路径必须加上引号
+		            // lastName:function(val,oldval){
+		            //     console.log(val)
+		            // }
+		        },//以V-model绑定数据时使用的数据变化监测
+			});
+			vm.$watch("lastName",function(newval,oldval){
+		        console.log(newval)
+		    },{immediate:true})//主动调用$watch方法来进行数据监测
+
 		}
 	</script>
 </head>
@@ -64,6 +129,15 @@
 
 		<!-- 过滤器  {{msg | filterA | filterB}} -->
 		<!-- currency  金钱的标识  用法->  {{12 | currency '￥'}} 可接受传参 -->
+
+
+		<div class="dragBox" v-drag="a"></div>
+
+
+		<input type="text" v-model:value="childrens.name" />
+    	<input type="text" v-model:value="lastName" />
+
+
 	</div>
 </body>
 </html>
