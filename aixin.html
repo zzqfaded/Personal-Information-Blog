@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+
+<body>
+	<canvas class = "canvas"></canvas>	
+	<script>
+		var S = {
+			start: function(){
+				Draw.init();
+				//Draw.drawRadial();
+				Shape.switchShape(Shape.drawHeart());
+			  Draw.loop(function(){
+				Shape.render();
+				});
+				}
+			
+			};
+		Point = function(args){
+			this.x = args.x;
+			this.y = args.y;
+			this.z = args.z;
+			this.a = args.a;
+			};
+		Dot = function(x,y){
+			this.p = new Point({
+				x:x,
+				y:y,
+				z:5,
+				a:1,
+				h:0
+				});
+			this.e = 0.07;
+			this.s = true;
+			this.t = this.clone();
+			this.q = [];
+			};
+Dot.prototype = {
+			clone: function(){
+				return new Point({
+						x: this.x,
+						y: this.y,
+						z: this.z,
+						a: this.a,
+						h: this.h
+						});
+				},
+			move: function(p){
+				this.q.push(p);
+				},
+			moveTowards: function(n){
+				var dx = this.p.x - n.x,
+						dy = this.p.y - n.y,
+						dl = Math.sqrt(dx * dx + dy * dy),
+						e = this.e * dl;
+						
+						if(this.h === -1){
+							this.p.x = n.x;
+							this.p.y = n.y;
+							return true;
+							}
+						if(dl > 1){
+							this.p.x -= (dx / dl * e);
+							this.p.y -= (dy / dl * e);
+							}
+						else{
+								if(this.h > 0){
+									this.h--;
+									}
+									else{
+										return true;
+										}
+						}
+				    return false;
+				},
+			refreshDot: function(){
+				if(this.moveTowards(this.t)){
+					var p = this.q.shift();
+					if(p){
+						this.t.x = p.x || this.p.x;
+						this.t.y = p.y || this.p.y;
+						this.t.z = p.z || this.p.z;
+						this.t.a = p.a || this.p.a;
+						this.t.h = p.h || 0;
+						}
+					else{
+						if(this.s){
+							this.p.x -= Math.sin(Math.random() * 3.142);
+							this.p.y -= Math.sin(Math.random() * 3.142);
+							}
+						}
+					}
+				},
+			render: function(){
+				this.refreshDot();
+				Draw.drawCircle(this.p);
+				}
+			};
+		Draw = (function(){
+			var canvas,
+			    context,
+			    renderFn,
+			    requestFrame = window.requestAnimationFrame ||
+			    		           window.webkitRequestAnimationFrame ||
+			    		           window.mozRequestAnimationFrame ||
+			    		           window.oRequestAnimationFrame ||
+			    		           window.msRequestAnimationFrame ||
+			    		           function(callback){
+			    		           	setTimeout(callback,1000 / 60);
+			    		           	};
+		return {
+			init: function(){
+				canvas = document.querySelector(".canvas");
+				context = canvas.getContext("2d");
+				canvas.width = window.innerWidth;
+				canvas.height = window.innerHeight;
+				},
+			loop: function(fn){
+				renderFn = !renderFn ? fn : renderFn;
+				context.clearRect(0,0,canvas.width,canvas.height);
+				renderFn();
+				requestFrame.call(window,this.loop.bind(this));
+				},
+			drawCircle: function(p){
+				var rg = context.createRadialGradient(p.x,p.y,2,p.x,p.y,p.z);
+				rg.addColorStop(0,"#feeeed");
+				rg.addColorStop(1,"#fcf16e");
+				context.fillStyle = rg;
+				context.beginPath();
+				context.arc(p.x,p.y,p.z,0,2 * Math.PI);
+				context.closePath();
+				context.fill();
+				}
+			}
+			}());
+Shape = (function(){
+			var gap = 10,
+					r = 15,
+					shapeDots = [],
+					canvas,
+					context;
+			function init(){
+				canvas = document.querySelector(".canvas"),
+				context = canvas.getContext("2d");
+				canvas.width = Math.floor(window.innerWidth / gap) * gap;
+				canvas.height = Math.floor(window.innerHeight / gap) * gap;
+				}
+			init();
+			function getX(t){
+				return canvas.width / 2 + r * (16 * Math.pow(Math.sin(t),3));
+				}
+			function getY(t){
+				return canvas.height / 2 - r * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(2 * t) - Math.cos(4 * t));
+				}
+			function processHeart(){
+				var pixels = context.getImageData(0,0,canvas.width,canvas.height).data,
+						dots = [],
+						x = 0,
+						y = 0,
+						fx = canvas.width,
+						fy = canvas.height,
+						w = 0,
+						h = 0;
+						for(var p = 0;p < pixels.length;p += 4 * gap){
+							if(pixels[p + 3] > 0){
+								dots.push(new Point({
+									x: x,
+									y: y
+									}));
+								w = x > w ? x : w;
+								h = y > h ? y : h;
+								fx = x < fx ? x : fx;
+								fy = y < fy ? y : fy;
+								}
+							x += gap;
+							if(x >= canvas.width){
+								x = 0;
+								y += gap;
+								p += 4 * gap * canvas.width;
+								}
+							}
+						return {dots: dots,w: w + fx,h: h + fy};
+				}
+			return {
+				drawHeart: function(){
+					context.lineWidth = 36;
+					context.clearRect(0,0,canvas.width,canvas.height);
+					var radian =0,step =  Math.PI / 180;
+					context.moveTo(getX(radian),getY(radian));
+					for(radian;radian < 2 * Math.PI;radian += step){
+						context.lineTo(getX(radian),getY(radian));
+						}
+					context.stroke();
+					context.font = "bold 200px Arial";
+					context.fillText("SL",getX(180) ,getY(180));
+					return processHeart();
+					},
+				switchShape: function(n){
+					var size = n.dots.length,
+							cx = canvas.width / 2 - n.w / 2,
+					    cy = canvas.height / 2 - n.h / 2;
+ 
+					  for(var i = 1;i < size; i ++){
+					  	shapeDots.push(new Dot(canvas.width / 2,canvas.height / 2));
+					  	}
+					  var d = 0;
+					  while(size > 1){
+					  	shapeDots[d].s = true;
+					  	shapeDots[d].move(new Point({
+					  		x: n.dots[d].x + cx ,
+					  		y: n.dots[d].y + cy ,
+					  		z: 5
+					  		}));
+					  		size --;
+					  		d++;
+					  	}  
+					},
+				render: function(){
+					for(var d = 0; d < shapeDots.length;d++){
+						shapeDots[d].render();
+						}
+					}
+				}
+			}());
+			S.start();
+	</script>
+</body>
+<html>
