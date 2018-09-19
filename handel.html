@@ -19,6 +19,7 @@
 			top: 0;
 		}
 	</style>
+	<script type="text/javascript" src="./js/drag.js"></script>
 	<script type="text/javascript" src="./js/vue.js"></script>
 	<script type="text/javascript">
 		window.onload = function(){
@@ -28,26 +29,11 @@
 			Vue.directive('drag',{
 				//初始化
 				bind:function(el,binding){
-					el.style.background = binding.value;
-					//阻止鼠标移动时  会选中文字或者图片
-					el.onselectstart = el.ondrag = function(){
-							return false;
-					}
-					//移动的距离 = 移动后的位置 - 初始的位置
-					el.onmousedown = function(ev){
-						var disX = ev.clientX - el.offsetLeft;
-						var disY = ev.clientY - el.offsetTop;
-						document.onmousemove = function(ev){
-							var l = ev.clientX - disX;
-							var t = ev.clientY - disY;
-							el.style.left = l + 'px';
-							el.style.top = t + 'px';
-						};
-						document.onmouseup = function(){
-							document.onmousemove = null;
-							document.onmouseup = null;
-						}
-					}
+					// odiv = el;
+					// odiv.style.background = binding.value;
+					
+					new drag(el);
+					
 				}
 			});
 			var vm = new Vue({
@@ -79,7 +65,7 @@
 					enter:function(){
 						// alert(event.keyCode);
 						//keyCode   拿到键盘事件对象的ascoll值
-						
+						console.log(event);
 						if(event.keyCode == 13){
 							alert("回车键");
 						}
@@ -118,6 +104,7 @@
 		<!-- keydown  keyup  键盘事件 -->
 		<!-- vue键盘事件属性  .13  .enter  回车键  .up  .dowm  .left  .right  .delete -->
 		<input type="text" @keydown.enter="enter()" name="">
+		<input type="text" value="测试" name="">
 		<!-- vue  属性用bind -->
 		<!-- v-bind的简写   :   -->
 		<!-- class   -> v-bind:class="red:redBol" -->
