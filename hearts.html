@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>love</title>
+    <style type="text/css">
+      body{
+        margin: 0;
+        overflow: hidden;
+        background: #303035;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas></canvas>
+    <script type="text/javascript">
+      var canvas = document.querySelector("canvas");
+      var ctx = canvas.getContext("2d");
+
+      var ww = window.innerWidth;
+      var wh = window.innerHeight;
+
+      var hearts = [];
+      var heartImgs = ["/images/hearts/heart1.png","/images/hearts/heart2.png","/images/hearts/heart3.png","/images/hearts/heart4.png","/images/hearts/heart5.png",,"/images/hearts/heart6.png"];
+      var mouseX,mouseY;
+      function init(){
+        window.requestAnimationFrame(render);
+        canvas.width = ww;
+        canvas.height = wh;
+        for(var i = 0; i <205; i++){
+          hearts.push(new Heart());
+        }
+
+        console.log("init执行完了");
+      }
+
+      function Heart() {
+        this.x = Math.random() * ww;
+        this.y = Math.random() * wh;
+        this.opacity = (Math.random() * 0.5) + 0.7;
+        this.vel = {
+          x: (Math.random() - 0.5) * 4,   //如果是正数   全部向右下角移动
+          y: (Math.random() - 0.5) * 4    //减去0.5  就是随机的正负数了  随机方向移动
+        };
+        this.targetScale = (Math.random() * 0.15) + 0.02;     //初始化缩放程度
+        this.scale = this.targetScale * Math.random();
+        // this.mouseX = "";
+        // this.mouseY = "";
+        this.update = function(){
+          this.x += this.vel.x;   //随机的x轴方向移动
+          this.y += this.vel.y;   //随机的Y轴方向移动
+
+          this.scale += (this.targetScale - this.scale) * 0.01;
+          //当超出浏览器可视化宽度或者高度时  则消失  并且重新update  初始化x，y轴位置
+          if(this.x - this.width > ww || this.x + this.width < 0){
+            this.scale = 0;
+            this.x = Math.random() * ww;
+          }
+          if(this.y - this.height > wh || this.y + this.height < 0){
+            this.scale = 0;
+            this.y = Math.random() * wh;
+          }
+          // console.log(this.scale);
+          this.width = 473.8 * this.scale;    
+          this.height = 408.6 * this.scale;
+          // console.log(this.width);
+        };
+        this.draw = function(){
+          ctx.font = "50px Arial";
+          var gradient = ctx.createLinearGradient(0,ww * 0.5 -  150,wh * 0.5 + 50,200);
+          gradient.addColorStop("0","#d2e1c8");
+          gradient.addColorStop("0.5","#bae5d5");
+          gradient.addColorStop("1.0","#a3f3eb");
+          ctx.fillStyle = gradient;
+          // console.log(ww * 0.5);
+          ctx.fillText("香颐仙女",ww * 0.5 -  150 , wh * 0.5 + 50);
+          document.onmousemove = (ev)=>{
+            var event = ev || window.event;
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+          }
+          ctx.font = "50px";
+          ctx.fillStyle = "white";
+
+          if(mouseX > document.documentElement.clientWidth - 150 ){
+            mouseX = document.documentElement.clientWidth - 150;
+          }
+          if(mouseX < 0){
+            mouseX = 0;
+          }
+          // if(mouseY > document.documentElement.clientHeight){
+          //   mouseY = document.documentElement.clientHeight;
+          // }
+          // if(mouseY < -50){
+          //   mouseY = -50;
+          // }
+          ctx.fillText("张子强",mouseX , mouseY);
+          
+          ctx.globalAlpha = this.opacity;   //当前绘图的透明度    globalAlpha返回当前的绘图目标的透明度
+          ctx.drawImage(heartImage, this.x - this.width * 0.5, this.y - this.height * 0.5,this.width, this.height);
+        }
+      }
+
+
+      function render(){    
+        // console.log("执行render");
+        ctx.clearRect(0, 0, ww, wh);      //在给定的矩形内清除指定的像素    就是像运动框架一下  首先清除定时器然后再执行
+        ctx.globalAlpha = 1;
+        // ctx.fillStyle = "rgba(255,255,255,0.3)";
+        // ctx.fillRect(0, 0, ww, wh);
+        for(var i=0; i<205; i++){
+          hearts[i].update();
+          hearts[i].draw();
+        }
+
+        window.requestAnimationFrame(render);
+      }
+
+
+
+
+      //这里就开始了    首先实例化一个图片对象  这个图片初始化的位置和透明度和缩放程度继承init()
+      var heartImage = new Image();
+      heartImage.src = "/images/hearts/heart4.png";
+      heartImage.onload = init();   //执行render
+      // for(var i = 0;i<heartImgs.length;i++){
+      //   heartImage.src =  heartImgs[i];
+      // }
+        //给resize事件添加事件句柄   
+      window.addEventListener("resize",function(){
+        ww = window.innerWidth;
+        wh = window.innerHeight;
+      })
+
+    </script>
+  </body>
+</html>

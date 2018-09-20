@@ -1,0 +1,46 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head> 
+<meta charset="UTF-8"> 
+<title>Title</title> 
+</head> 
+<body> 
+<div>
+<canvas id="canvas" style="border: 1px solid #aaa;display: block;margin: 50px auto;"></canvas> 
+</div> 
+<script> 
+window.onload = function () { 
+    var canvas = document.getElementById("canvas"); 
+    var ctx = canvas.getContext('2d'); 
+    canvas.width = 800; 
+    canvas.height = 800; 
+    drawHeart(ctx,400,350,60,30); 
+} 
+function drawHeart(ctx,x,y,R,rot) { 
+    ctx.save();             //保存当前环境的状态
+    ctx.translate(x,y);         //重新映射画布上的 (0,0) 位置
+    // ctx.rotate(rot/0*Math.PI);    //可旋转爱心
+    ctx.scale(R, R);                //缩放当前绘图至更大或更小
+
+    
+    ctx.beginPath(); 
+    ctx.arc(-1,0,1,Math.PI,0,false); 
+    ctx.arc(1,0,1,Math.PI,0,false); //貝塞尔曲线画心 
+    ctx.bezierCurveTo(1.9, 1.2, 0.6, 1.6, 0, 3.0); 
+    ctx.bezierCurveTo( -0.6, 1.6,-1.9, 1.2,-2,0); 
+    ctx.closePath(); 
+     /*ctx.strokeStyle = "red"; 
+     ctx.lineWidth = "3px";*/
+     ctx.fillStyle = "red";         //爱心颜色
+     // ctx.shadowColor = "gray";      //阴影颜色
+     // ctx.shadowOffsetX = 5;         //阴影x轴位置
+     // ctx.shadowOffsetY = 5;         //阴影Y轴位置
+     // ctx.shadowBlur = 5;              //阴影的模糊度
+     ctx.fill();                    //填充当前绘图（路径）
+     //ctx.stroke(); ctx.restore();     //绘制已定义的路径  //返回之前保存过的路径状态和属性
+} 
+
+</script> 
+</body> 
+
+</html>
