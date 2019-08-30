@@ -12,6 +12,7 @@
     </style>
   </head>
   <body>
+    <img hidden id="target" src="./images/dly.jpg" alt="" width="300" height="500">
     <canvas></canvas>
     <script type="text/javascript">
       var canvas = document.querySelector("canvas");
@@ -19,7 +20,7 @@
 
       var ww = window.innerWidth;
       var wh = window.innerHeight;
-
+      let target = document.getElementById("target");
       var hearts = [];
       var heartImgs = ["/images/hearts/heart1.png","/images/hearts/heart2.png","/images/hearts/heart3.png","/images/hearts/heart4.png","/images/hearts/heart5.png",,"/images/hearts/heart6.png"];
       var mouseX,mouseY;
@@ -44,8 +45,8 @@
         };
         this.targetScale = (Math.random() * 0.15) + 0.02;     //初始化缩放程度
         this.scale = this.targetScale * Math.random();
-        // this.mouseX = "";
-        // this.mouseY = "";
+        this.mouseX = "";
+        this.mouseY = "";
         this.update = function(){
           this.x += this.vel.x;   //随机的x轴方向移动
           this.y += this.vel.y;   //随机的Y轴方向移动
@@ -73,7 +74,6 @@
           gradient.addColorStop("1.0","#a3f3eb");
           ctx.fillStyle = gradient;
           // console.log(ww * 0.5);
-          ctx.fillText("香颐仙女",ww * 0.5 -  150 , wh * 0.5 + 50);
           document.onmousemove = (ev)=>{
             var event = ev || window.event;
             mouseX = event.clientX;
@@ -88,15 +88,16 @@
           if(mouseX < 0){
             mouseX = 0;
           }
-          // if(mouseY > document.documentElement.clientHeight){
-          //   mouseY = document.documentElement.clientHeight;
-          // }
-          // if(mouseY < -50){
-          //   mouseY = -50;
-          // }
-          ctx.fillText("张子强",mouseX , mouseY);
+          if(mouseY > document.documentElement.clientHeight){
+            mouseY = document.documentElement.clientHeight;
+          }
+          if(mouseY < -50){
+            mouseY = -50;
+          }
+          // ctx.fillText("邓奕岚小可爱",mouseX , mouseY);
           
           ctx.globalAlpha = this.opacity;   //当前绘图的透明度    globalAlpha返回当前的绘图目标的透明度
+          ctx.drawImage(target,ww * 0.5 -  115,wh * 0.5 - 125,230,250)
           ctx.drawImage(heartImage, this.x - this.width * 0.5, this.y - this.height * 0.5,this.width, this.height);
         }
       }
@@ -106,8 +107,8 @@
         // console.log("执行render");
         ctx.clearRect(0, 0, ww, wh);      //在给定的矩形内清除指定的像素    就是像运动框架一下  首先清除定时器然后再执行
         ctx.globalAlpha = 1;
-        // ctx.fillStyle = "rgba(255,255,255,0.3)";
-        // ctx.fillRect(0, 0, ww, wh);
+        ctx.fillStyle = "rgba(0,0,0,0.9)";
+        ctx.fillRect(0, 0, ww, wh);
         for(var i=0; i<205; i++){
           hearts[i].update();
           hearts[i].draw();
@@ -121,7 +122,7 @@
 
       //这里就开始了    首先实例化一个图片对象  这个图片初始化的位置和透明度和缩放程度继承init()
       var heartImage = new Image();
-      heartImage.src = "/images/hearts/heart4.png";
+      heartImage.src = "./images/hearts/heart6.png";
       heartImage.onload = init();   //执行render
       // for(var i = 0;i<heartImgs.length;i++){
       //   heartImage.src =  heartImgs[i];

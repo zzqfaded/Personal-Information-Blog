@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>
+	</title>
+	<style>
+		body{
+			margin: 0;
+			padding: 0;
+			overflow: hidden;;
+		}
+	</style>
+</head>
+<body>
+<script>
+var vWidth = window.innerWidth;
+var vHeight = window.innerHeight;
+var cns = document.createElement("canvas");
+//canvas的默认宽度是300  默认高度是150
+// console.log(3.65.toString());
+cns.width = vWidth;
+cns.height = vHeight;
+document.body.appendChild(cns);		//把canvas放在body里面
+var ctx = cns.getContext('2d');		//方法返回一个用于在画布上绘图的环境。
+//事例：Canvas.getContext(contextID)
+// ctx.fillStyle = "rgba(6,9,74,1)";	//fillStyle 属性设置或返回用于填充绘画的颜色、渐变或模式。
+// ctx.fillRect(0,0,vWidth,vHeight);						//fillRect() 方法绘制“已填色”的矩形。默认的填充颜色是黑色。
+
+
+var particles = new Array();
+var Particles = function(){
+	//起始的X轴位置		
+	this.x = Math.round(Math.random() * vWidth) - Math.round(Math.random() * vWidth);
+	//起始的Y轴位置
+	this.y = Math.round(Math.random() * vHeight) - Math.round(Math.random() * vHeight);
+	// substr() 方法可在字符串中抽取从 start 下标开始的指定数目的字符。
+	// stringObject.substr(start,length)
+	this.hue = "#" + Math.random().toString(16).substr(2,6);	//取随机数胡颜色码
+	this.directionX = "left";	
+	this.directionY = "bottom";
+};
+
+for(var i = 0; i < 1000; i++){
+	//每一个都会new一个实例
+	particles[i] = new Particles();
+}
+
+var paint = param =>{
+	//beginPath() 方法开始一条路径，或重置当前的路径。
+	ctx.beginPath();
+	//lineWidth 属性设置或返回当前线条的宽度，以像素计。
+	ctx.lineWidth = "15";
+	//strokeStyle 属性设置或返回用于笔触的颜色、渐变或模式。
+	ctx.strokeStyle = particles[param].hue;		//第param个的颜色是随机"#hub"
+	ctx.moveTo(particles[param].x, particles[param].y);
+  if (particles[param].directionY == "bottom") {
+    particles[param].y = particles[param].y + Math.round(Math.random() * 2);
+    if (particles[param].y > vHeight) {
+      particles[param].directionY = "top";
+    }
+  }
+  if (particles[param].directionY == "top") {
+    particles[param].y = particles[param].y - Math.round(Math.random() * 2);
+    if (particles[param].y < 0) {
+      particles[param].directionY = "bottom";
+    }
+  }
+
+  if (particles[param].directionX == "left") {
+    particles[param].x = particles[param].x + Math.round(Math.random() * 2);
+    if (particles[param].x > vWidth) {
+      particles[param].directionX = "right";
+    }
+  }
+  if (particles[param].directionX == "right") {
+    particles[param].x = particles[param].x - Math.round(Math.random() * 2);
+    if (particles[param].x < 0) {
+      particles[param].directionX = "left";
+    }
+  }
+
+  ctx.lineTo(particles[param].x, particles[param].y);
+  ctx.closePath();
+  ctx.stroke();
+};
+
+var frame = () =>{
+	ctx.fillStyle = "rgba(6,9,74,1)";//背景颜色
+	ctx.fillRect(0,0,vWidth,vHeight);	//
+	for(var j = 0; j<1000;j++){
+		paint(j);
+	}
+	window.requestAnimationFrame(frame);
+};
+window.requestAnimationFrame(frame);
+
+
+</script>
+</body>
+</html>
